@@ -34,13 +34,13 @@ def tag_cjke(text):
     prev_lang=None
     tagged_text = ""
     for s in sentences:
-        #全为符号跳过
+        #全為符號跳過
         nu = re.sub(r'[\s\p{P}]+', '', s, flags=re.U).strip()   
         if len(nu)==0:
             continue
         s = re.sub(r'[()（）《》「」【】‘“”’]+', '', s)
         jp=re.findall(jp_pattern, s)
-        #本句含日语字符判断为日语
+        #本句含日語字符判斷為日語
         if len(jp)>0:  
             prev_lang,tagged_jke=tag_jke(s,prev_lang)
             tagged_text +=tagged_jke
