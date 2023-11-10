@@ -13,14 +13,19 @@ lang2token = {
 def transcribe_one(audio_path):
     # load audio and pad/trim it to fit 30 seconds
     audio = whisper.load_audio(audio_path)
+    # print(len(audio), audio)
     audio = whisper.pad_or_trim(audio)
-
-    # make log-Mel spectrogram and move to the same device as the model
-    mel = whisper.log_mel_spectrogram(audio).to(model.device)
-
+    # print(len(audio), audio)
     # detect the spoken language
-    _, probs = model.detect_language(mel)
-    print(f"Detected language: {max(probs, key=probs.get)}")
+    try:
+        mel = whisper.log_mel_spectrogram(audio=audio, n_mels=128).to(model.device)
+        # print(type(mel), mel)
+        _, probs = model.detect_language(mel)
+        # print(_, type(_), type(probs), probs)
+        print(f"Detected language: {max(probs, key=probs.get)}")
+    except Exception as e:
+      print(e)
+    
     lang = max(probs, key=probs.get)
     # decode the audio
     options = whisper.DecodingOptions(beam_size=5)
